@@ -1,0 +1,81 @@
+CS471 - Programming Language
+Section: 01
+Assignment #2 due: 9/9/13
+Author: Yu, Danny (dyu6)
+Date: 9/18/13
+
+Q1: What are pragmas? Why are they processed by the scanner?  Briefly, if you are a language designer what are the trade off of allowing pragmas? 
+
+Answer: Pragmas provide directives or hints to the compiler. Pragmas are processed by the scanner because like comments, they can appear anywhere in the source program, and allowing them in the grammar would complicate the parser.
+Benefits: Pragmas that serve as directives can turn on/off various run-time checks, code improvements, and performance profiling. Pragmas that serve only as hints provide the compiler with information about the program to make it do a better job, such as telling it if a variable is used a lot or if a subroutine is only used for the value it returns.
+Drawbacks: Pragmas may change program semantics and thus complicate things or create contradictory information.
+
+Source: p.65-66 of Scott's Programming Language Pragmatics 3rd Ed. 
+
+Q2: Exercise 2.27 page 108.
+
+Answer:
+A -> if X then S E
+X -> cN
+Y -> sN
+S -> begin A | begin A else Y
+E -> end
+N -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+Q3. Rewrite the expressions a–d below in prefix notation. Assume the following precedences  and associativities for the operators:
+
+Answer:
+a. w @ x + y @ z
+((w @ x) + (y @ z))
+Final: + @ w x @ y z
+
+b. w + (x @ y + z)
+(w + ((x @ y) + z))
+Final: + w + @ x y z
+
+c. w @ x @ y + z
+((w @ (x @ y)) + z)
+Final: + @ w @ x y z
+
+d. w / x * y / z
+((w / (x * y)) / z)
+Final: / / w * x y z
+
+Q4. Rewrite the expression in 3 using the same assumption but in postfix notation.
+
+Answer:
+a. w @ x + y @ z
+((w @ x) + (y @ z))
+Final: w x @ y z @ +
+
+b. w + (x @ y + z)
+(w + ((x @ y) + z))
+Final: w x y @ z + +
+
+c. w @ x @ y + z
+((w @ (x @ y)) + z)
+Final: w x y @ @ z +
+
+d. w / x * y / z
+((w / (x * y)) / z)
+Final: w x y * / z /
+
+Q5: Write regular expression:
+A. Page 102 exercise 2.1
+1. Write the regular expression specified in exercise 2.1 c for integers only (not floating point).
+
+Answer: 
+^(0[xX])?([0-9a-fA-F]+)([uU]?[lL]?L{2}?l{2}?)$
+
+2. 2.1f (but don't include "cent" i.e $***3921 or $325)
+
+Answer: 
+^(\$)(\*)*(\d{1,3})(\,\d{3})*$
+
+B. Write a regular expression that recognizes phone numbers in the North American numbering plan...
+
+Answer: 
+^(\+1\s(((\([2-9][0-9][0-9]\))\s([2-9][0-9][0-9])\s\-\s([0-9]{4}))|(([2-9][0-9][0-9])\s\-\s([2-9][0-9][0-9])\s\-\s([0-9]{4}))))$
+
+Q6: Write a Ruby class that... 
+Example code: YuAs2Ex1.rb

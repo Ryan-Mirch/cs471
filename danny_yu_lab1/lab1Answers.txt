@@ -1,0 +1,79 @@
+CS471 - Programming Language
+Section: 01
+Lab #1 due 9/1/13
+Author: Yu, Danny (dyu6)
+Date: 8/29/13
+
+Q1. Label each underline error as either: lexical, syntactical, static semantic, dynamic semantic or logical error.
+
+Answer1: static semantic - b2 is not given a type and errors during compilation
+Answer2: syntactical - does not have the semicolon, so it would not fall under structure of the context free grammar
+Answer3: lexical - f#r would not be recognized by the lexer
+Answer4: syntactical - since union is a keyword and can't be used, it would not be recognized by the parse tree. assigning 'a' to an int will assign the variable the ascii value of 'a', so it would not error from that.
+Answer5: logical - the chg() function does not return any values, so chg(a) would return the default value
+Answer6: syntactical - the compiler would be expecting '==' instead of '=' so it would not be recognized by the parse tree
+Answer7: static semantic - the 'x' variable is used, but was never intitialized, which is checked at compile time
+Answer8: dynamic semantic - it would give an array out of bounds error, which is checked at runtime.
+
+Q2. Explain what the assembly code generated does
+
+	.file	"lab1_1EH.c"
+	.text
+.globl powerI
+	.type	powerI, @function
+powerI:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$16, %esp
+	movl	$1, -8(%ebp)
+	movl	$0, -4(%ebp)
+	jmp	.L2
+
+// Initializes the stack, initializes and assigns acc=1, initializes and assigns p=0, then jumps to .L2 where the for loop begins 
+
+.L3:
+	movl	-8(%ebp), %eax
+	imull	12(%ebp), %eax
+	movl	%eax, -8(%ebp)
+	addl	$1, -4(%ebp)
+
+// This is the inside of the for loop - It does acc = acc * base; and then increments the counter of the for loop.
+
+.L2:
+	movl	-4(%ebp), %eax
+	cmpl	8(%ebp), %eax
+	jl	.L3
+// This compares p to pow. If p<pow, jump to .L3 (the inside of the for loop). Otherwise...
+
+	movl	-8(%ebp), %eax
+	leave
+	ret
+
+// Compares p to pow, if p>=pow, returns the value of acc.
+
+	.size	powerI, .-powerI
+	.ident	"GCC: (Debian 4.4.6-11) 4.4.6"
+	.section	.note.GNU-stack,"",@progbits
+
+Q3.The purpose of this exercise is to compare imperative and functional style of coding and code and examine some C style issues...
+
+a. The purpose of the ',' is to tell the compiler that there are more variables to initialize to ints after 'acc' is initialized to an int.
+
+b. Please see lab1_1.c, lab1_1.h, lab1Driver.c, Makefile
+
+c. O(n)
+d. O(n)
+
+Q4. In your local implementation of C, what is the limit on the size of integers? (You can use /usr/include/limits.h to figure out the range of values of type int.)  What happens in the event of arithmetic overflow? 
+
+The limit on the size of integers is 32 bits. In the case of an artihmetic overflow for unsigned ints, the value "wraps around." So, when adding 1 to the max value of an unsigned int (0xFFFFFFFF), the value of the int becomes 0 because the highest bit cannot be stored. However for signed ints, arithmetic overflow results in undefined behavior (for example, the addition of two positive signed integers causing overflow may result in a negative int). 
+Source: http://en.wikipedia.org/wiki/Integer_overflow
+
+Q5. Examine syntactic design issues by writing simple Python scripts and Ruby scripts.
+
+a,b. Please see fact.py and fact.rb
+
+c. The "#!..." is called a Shebang. It makes it so that the program is run using that command, ie: ./fact.rb will become /usr/bin/ruby ./fact.rb. 
+Source: http://stackoverflow.com/questions/17447532/what-is-the-use-of-usr-local-bin-ruby-w-at-the-start-of-a-ruby-program
+
+To make a file executable in unix/linux, you type chmod +x fileName

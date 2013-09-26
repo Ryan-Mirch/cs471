@@ -1,0 +1,4 @@
+#(@descr) in File:: Fig4_12.c 
+  Pattern:: (?-mix:(match)\((.*)\))
+
+ char c '+' '-' '*' '(' ')' token

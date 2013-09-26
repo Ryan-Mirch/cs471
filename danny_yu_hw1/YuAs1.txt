@@ -1,0 +1,112 @@
+CS471 - Programming Language
+Section: 01
+Assignment #1 due: 9/9/13
+Author: Yu, Danny (dyu6)
+Date: 9/5/13
+
+Q1: Examine syntactic design issues by writing simple Python scripts and Ruby scripts...
+
+Answer: One synctactic design which differs between Python and Ruby is the use of 'end' at the end of blocks or functions. I prefer how Ruby requires the keyword 'end'. When writing code this way, it makes the code's structure more organized and helps to keep track of where certain parts of the code begins/ends instead of having to rigidly align code with indentations. When reading code this way, it makes it easier to tell where a method/block ends and as a result, makes it easier to read. 
+Example code: YuAs1Ex1.py, YuAs1Ex2.rb
+
+Q2: Page 36 exercise 1.1 a-d
+
+Answer:
+a. int @pple;
+b. functionName(a,b
+c. i = 400;   # i was never initialized and given a data type here
+d. int arrayName[9]; int num = arrayName[10];
+
+Q3: Given the following properties (attributes) of a identifier, determine when the attributes are bound to the name. State which are attributes that are statically bound (can not change) and which are dynamically (can be change). Briefly explain you answer...
+
+Answer: 
+a. For C, data type and name are static - once you declare the data type and name of the identifier, it cannot be changed. However, the value of the identifier is dynamic and can change.
+b. For Python, only name is statically bound and cannot change. Data type and value are dynamically bound. Names are bound to objects, but names can be bound to objects of different types. For example: 
+name = 5
+name = "Danny"
+is legal because Python is a dynamically typed language.
+c. For Ruby, only name is statically bound, like for Python. It is also a dynamically typed language. 
+Source: http://pythonconquerstheuniverse.wordpress.com/2009/10/03/static-vs-dynamic-typing-of-programming-languages/
+
+
+Q4: What does ISO stand for? When was the latest ISO specification for 'C' approved?  When was the latest Ansi/ISO specification for 'C++' approved? Does Java have an ISO specification? Does C# have an ISO specification? Does Python have an ISO specification? Does Ruby have an ISO specification?
+
+Answer:
+ISO stands for International Organization for Standardization. 
+The latest ISO specification for:
+C - C11, 2011
+C++ - C++11, 2011
+C# - C# 2.0, 2006
+Java has no ISO specification (they withdrew from the process)
+Python has no ISO specification
+Ruby - 2012
+
+Sources:
+http://iso.org
+http://www.open-std.org/
+http://en.wikipedia.org/wiki/Java_%28programming_language%29
+http://en.wikipedia.org/wiki/C_Sharp_%28programming_language%29
+http://stackoverflow.com/questions/1535702/python-not-a-standardized-language
+
+Q5: Page 37 exercise 1.5. In lab problem 4 you began this exercise, now please complete the rest of this problem. What are the implications of size limits on the portability of programs from one machine/compiler to another? How do the answers to these questions differ for Java? for Python? for Ada?
+
+Answer: *NOTE: I am copying part of my lab over to this question because I had already answered part of this question there.
+Having size limits implies that there is a standard for the size of data types so that the program can be supported on different machines. If not, the program would most likely break/error from underflow/overflow. In Ada, the range of an integer includes the range -2^15+1 to +2^15-1 and in the case of an overflow, the compiler uses runtimes checks to throw an exception for out of range operations. In Java, the range of an integer is from -2,147,483,648 to 2,147,483,647 (inclusive), and in the case of an overflow, it wraps around to the minimum value and increases from there. In Python, there is no limit on the size of an integer, and thus has no problems with overflow - it depends on the amount of memory available.
+
+Sources: http://en.wikipedia.org/wiki/Integer_overflow
+http://www.ada-auth.org/arm.html
+http://stackoverflow.com/questions/3001836/how-does-java-handle-integer-underflows-and-overflows-and-how-would-you-check-fo
+http://stackoverflow.com/questions/5470693/python-number-limit
+
+Q6: Rewrite the expressions a–d below in prefix notation.
+
+Answer: 
+a) w ^ x ^ y + z
+ ((w ^ (x ^ y)) + z)
+ ((w ^ (^ x y)) + z)
+ ((^ w (^ x y)) + z)
+ (+ (^ w (^ x y )) z)
+FINAL: + ^ w ^ x y z
+b) w + (x * y + z)
+ (w + ((x * y) + z))
+ + (w (+ (* x y) z))
+FINAL: + w + * x y z
+c) w * x * y ^ z
+(((w * x) * y) ^ z)
+(^ (* (* w x) y) z)
+FINAL: ^ * * w x y z
+d) w / x * y / z
+(((w / x) * y) / z)
+(/ (* (/ w x) y) z)
+FINAL: / * / w x y z
+
+Q7: Rewrite the expression in 6 using the same assumption but in postfix notation.    
+
+Answer:
+a) w ^ x ^ y + z
+((w ^ (x ^ y)) + z)
+((w (x y ^)^) z +)
+FINAL: w x y ^ ^ z +
+b) w + (x * y + z)
+(w + ((x * y) + z))
+FINAL: w x y * z + +
+c) w * x * y ^ z
+(((w * x) * y) ^ z
+FINAL: w x * y * z ^
+d) w / x * y / z
+(((w / x) * y) / z)
+FINAL: w x / y * z /
+Source: http://www.cs.man.ac.uk/~pjj/cs2121/fix.html
+
+Q8: Find the following values of Ackermann's function.  Show your work. 
+ack(m,n)
+
+Answer:
+a) ack(1,0) = ack(m-1,1) = ack(0,1) = n + 1 = 2
+b) ack(0,3) = n + 1 = 4
+c) ack(1,2) = ack(m-1, ack(m,n-1)) = ack(0, ack(1,1)) = ack(0, ack(0,ack(1,0))) = ack(0, ack(0,2)) = ack(0, 3) = 4
+d) ack(2,1) = ack(1, ack(2,0)) = ack(1, ack(1, 1)) = ack(1, ack(0, ack(1,0))) = ack(1, ack(0, ack(0,1))) = ack(1, ack(0, 2)) = ack(1, 3) = ack(0, ack(1, 2)) = ack(0, 4) = 5
+e)N = 14
+f)N = 6
+g)N = 8
+example code: YuAs1Ex3.c (Executable is YuAs1Ex3), YuAs1Ex4.py, YuAs1Ex5.rb

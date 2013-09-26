@@ -1,0 +1,398 @@
+CS471 - Programming Language
+Section: 01  
+Lab #2 due: 9/15/13
+Author: Yu, Danny (dyu6)
+Date: 9/12/13
+
+Q2. The comment above each function in Fig4_12R.c includes the rules in BNF.  
+
+a. On a piece of paper write (or in the text editor) the grammar rules down (You may consider numbers as terminal symbols for this part.) Notice that terminal symbols (operators) are 'match'ed and then used to calculate the result, terminal symbols (digits)  are used to build the numbers and non-terminal symbols are function calls.   
+
+command -> expr
+expr -> term + expr | term 
+term -> factor * term | factor
+factor -> ( expr ) | number
+number -> digit { digit }
+digit -> 0 | 1 | 2 | 3 | 4 
+               | 5 | 6 | 7 | 8 | 9
+
+b. From the grammar can you determine the precedence of the operators, + and * ?  Highest means tightest bound.
+
+'*' is higher precedence than '+' because it would be lower down on the parse tree.
+
+c. Parenthesize the following expressions according to the rules of the grammar: 
+
+** Done using leftmost derivation
+1. 5 + 3 + 2
+expr
+term + expr
+factor + expr
+(expr) + expr
+(term + expr) + expr
+(factor + expr) + expr
+(number + expr) + expr
+(digit + expr) + expr
+(5 + expr) + expr
+(5 + term) + expr
+(5 + factor) + expr
+(5 + number) + expr
+(5 + digit) + expr
+(5 + 3) + expr
+(5 + 3) + term
+(5 + 3) + factor
+(5 + 3) + number
+(5 + 3) + digit
+(5 + 3) + 2 
+
+** Done using leftmost derivation
+2. 5 + 2 * 10
+expr
+term + expr
+factor + expr
+number + expr
+digit + expr
+5 + expr
+5 + term
+5 + factor
+5 + (expr)
+5 + (term)
+5 + (factor * term)
+5 + (number * term)
+5 + (digit * term)
+5 + (2 * term)
+5 + (2 * factor)
+5 + (2 * number)
+5 + (2 * digit)
+5 + (2 * 10)
+
+d. Using the grammar rules write the left derivation for c.1.
+5 + 3 + 2
+expr
+term + expr
+factor + expr
+number + expr
+digit + expr
+5 + expr
+5 + term + expr
+5 + factor + expr
+5 + number + expr
+5 + digit + expr
+5 + 3 + expr
+5 + 3 + term
+5 + 3 + factor
+5 + 3 + number
+5 + 3 + digit
+5 + 3 + 2
+
+Q3. Add minus, "-", operator to the grammar.
+
+a. Minus should have a lower precedence than "*" and higher precedence than "+".   It should have the same associativity as "*" and "+"
+
+command -> expr
+expr -> minus + expr | minus
+minus -> term - minus | term
+term -> factor | factor * term
+factor -> ( expr ) | number
+number -> digit { digit }
+digit -> 0 | 1 | 2 | 3 | 4 
+               | 5 | 6 | 7 | 8 | 9
+
+b. Parenthesize the following expressions according to the rules of the grammar:
+
+** These are done using leftmost derivation
+1. 10 - 20 - 30
+expr 
+minus
+term - minus
+factor - minus
+(expr) - minus
+(minus) - minus
+(term - minus) - minus
+(factor - minus) - minus
+(number - minus) - minus
+(digit - minus) - minus
+(10 - minus) - minus
+(10 - term) - minus
+(10 - factor) - minus
+(10 - number) - minus
+(10 - digit) - minus
+(10 - 20) - minus
+(10 - 20) - term
+(10 - 20) - factor
+(10 - 20) - number
+(10 - 20) - digit
+(10 - 20) - 30
+
+** Done using leftmost derivation
+2. 10 - 20 * 2 - 3
+expr
+minus
+term - minus
+(expr) - minus
+(minus) - minus
+(term - minus) - minus
+(factor - minus) - minus
+(number - minus) - minus
+(digit - minus) - minus
+(10 - minus) - minus
+(10 - term) - minus
+(10 - factor) - minus
+(10 - (expr)) - minus
+(10 - (minus)) - minus
+(10 - (term)) - minus
+(10 - (factor * term)) - minus
+(10 - (number * term)) - minus
+(10 - (digit * term)) - minus
+(10 - (20 * term)) - minus
+(10 - (20 * factor)) - minus
+(10 - (20 * number)) - minus
+(10 - (20 * digit)) - minus
+(10 - (20 * 2)) - minus
+(10 - (20 * 2)) - term
+(10 - (20 * 2)) - factor
+(10 - (20 * 2)) - number
+(10 - (20 * 2)) - digit
+(10 - (20 * 2)) - 3
+
+3. 1 - 10 + 50 - 5
+expr
+minus
+term - minus
+factor - minus
+(expr) - minus
+(minus) - minus
+(term - minus) - minus
+(factor - minus) - minus
+(number - minus) - minus
+(digit - minus) - minus
+(1 - minus) - minus
+(1 - term) - minus
+(1 - factor) - minus
+(1 - (expr)) - minus
+(1 - (minus + expr)) - minus
+(1 - (term + expr)) - minus
+(1 - (factor + expr)) - minus
+(1 - (number + expr)) - minus
+(1 - (digit + expr)) - minus
+(1 - (10 + expr)) - minus
+(1 - (10 + minus)) - minus
+(1 - (10 + term)) - minus
+(1 - (10 + factor)) - minus
+(1 - (10 + number)) - minus
+(1 - (10 + digit)) - minus
+(1 - (10 + 50)) - minus
+(1 - (10 + 50)) - term
+(1 - (10 + 50)) - factor
+(1 - (10 + 50)) - number
+(1 - (10 + 50)) - digit
+(1 - (10 + 50)) - 5
+
+c. What is the associativity of "+", "*",  and "-" ?
+They are right associative.
+
+Q4. Please see Fig4_12R.c and Makefile
+
+Q6. The comment above each function in Fig4_12.c includes the grammar rules in BNF followed by the same rule using EBNF 
+
+a. On a piece of paper write BNF grammar rules down (You may consider numbers as terminal symbols for this part.) Notice that terminal symbols (operators) are 'match'ed and then used to calculate the result, terminal symbols (digits)  are used to build the numbers and non-terminal symbols are function calls.  
+
+command -> expr
+expr -> term | expr + term 
+term -> factor | term * factor
+factor -> ( expr ) | number
+number -> digit | number digit
+digit -> 0 | 1 | 2 | 3 | 4 
+               | 5 | 6 | 7 | 8 | 9
+
+b. From the grammar can you determine the precedence of the operators, + and * ?  Highest -> tightest bound.  
+
+'*' has a higher precedence than '+' because it is lower down on the parse tree.
+
+c. Parenthesize the following expressions according to the rules of the grammar:
+
+1. 5 + 2 * 10
+expr
+term
+term * factor
+factor * factor
+(expr) * factor
+(expr + term) * factor
+(term + term) * factor
+(factor + term) * factor
+(number + term) * factor
+(digit + term) * factor
+(5 + term) * factor
+(5 + factor) * factor
+(5 + number) * factor
+(5 + digit) * factor
+(5 + 2) * factor
+(5 + 2) * number
+(5 + 2) * digit
+(5 + 2) * 10   
+
+2. 5 + 2 + 10
+expr
+expr + term
+factor + term
+(expr) + term
+(expr + term) + term
+(factor + term) + term
+(number + term) + term
+(digit + term) + term
+(5 + term) + term
+(5 + factor) + term
+(5 + number) + term
+(5 + digit) + term
+(5 + 2) + term
+(5 + 2) + factor
+(5 + 2) + number
+(5 + 2) + digit
+(5 + 2) + 10
+
+d. Using the BNF rules, write the left derivation for the expressions in part c.
+
+1. 5 + 2 * 10
+expr
+expr + term
+factor + term
+number + term
+digit + term
+5 + term
+5 + term * factor
+5 + factor * factor
+5 + number * factor
+5 + digit * factor
+5 + 2 * factor
+5 + 2 * number
+5 + 2 * digit
+5 + 2 * 10
+
+2. 5 + 2 + 10
+expr
+expr + term
+expr + term + term
+term + term + term
+factor + term + term
+number + term + term
+digit + term + term
+5 + term + term
+5 + factor + term
+5 + number + term
+5 + digit + term
+5 + 2 + term
+5 + 2 + factor
+5 + 2 + number
+5 + 2 + digit
+5 + 2 + 10
+
+Q7. Add minus, "-", operator to the grammar.  
+
+a.Minus should have a lower precedence than "*" and higher precedence than "+".   It should have the same associativity as "*" and "+"
+
+command -> expr
+expr -> minus | expr + minus
+minus - > term | minus - term
+term -> factor | term * factor
+factor -> (expr) | number
+number -> digit | number digit
+digit -> 0 | 1 | 2 | 3 | 4
+      	       | 5 | 6 | 7 | 8 | 9 
+
+b. Parenthesize the following expressions according to the rules of the grammar:
+
+1. 10 - 20 - 30
+expr
+minus
+minus - term
+term - term
+factor - term
+(expr) - term
+(minus) - term
+(minus - term) - term
+(term - term) - term
+(factor - term) - term
+(number - term) - term
+(digit - term) - term
+(10 - term) - term
+(10 - factor) - term
+(10 - number) - term
+(10 - digit) - term
+(10 - 20) - term
+(10 - 20) - factor
+(10 - 20) - number
+(10 - 20) - digit
+(10 - 20) - 30
+
+2. 10 - 20 * 2 - 3
+expr
+minus
+minus - term
+term - term
+factor - term
+(expr) - term
+(minus) - term
+(term) - term
+(term * factor) - term
+(factor * factor) - term
+((expr) * factor) - term
+((minus) * factor) - term
+((minus - term) * factor) - term
+((term - term) * factor) - term
+((factor - term) * factor) - term
+((number - term) * factor) - term
+((digit - term) * factor) - term
+((10 - term) * factor) - term
+((10 - factor) * factor) - term
+((10 - number) * factor) - term
+((10 - digit) * factor) - term
+((10 - 20) * factor) - term
+((10 - 20) * number) - term
+((10 - 20) * digit) - term
+((10 - 20) * 2) - term
+((10 - 20) * 2) - factor
+((10 - 20) * 2) - number
+((10 - 20) * 2) - digit
+((10 - 20) * 2) - 3
+
+3. 1 - 10 + 50 - 5
+expr
+minus
+minus - term
+term - term
+factor - term
+(expr) - term
+(expr + minus) - term
+(minus + minus) - term
+(term + minus) - term
+(factor + minus) - term
+((expr) + minus) - term
+((minus) + minus) - term
+((minus - term) + minus) - term
+((term - term) + minus) - term
+((factor - term) + minus) - term
+((number - term) + minus) - term
+((digit - term) + minus) - term
+((1 - term) + minus) - term
+((1 - factor) + minus) - term
+((1 - number) + minus) - term
+((1 - digit) + minus) - term
+((1 - 10) + minus) - term
+((1 - 10) + term) - term
+((1 - 10) + factor) - term
+((1 - 10) + number) - term
+((1 - 10) + digit) - term
+((1 - 10) + 50) - term
+((1 - 10) + 50) - factor
+((1 - 10) + 50) - number
+((1 - 10) + 50) - digit
+((1 - 10) + 50) - 5
+
+c. What is the associativity of "+", "*",  and "-" ?
+They are left associative.
+
+Q8. Please see Fig4_12.c and Makefile.
+Recursive grammar rules that are left-associative would have problems. Using 'if' instead of 'while' causes operators to be right-associative, instead of left.
+
+Q9. Download this Ruby code  into the directory in which you downloaded Fig4_12.c, make the Ruby code executable, and run it...
+
+Please see RubyRE.rb and Names.txt
