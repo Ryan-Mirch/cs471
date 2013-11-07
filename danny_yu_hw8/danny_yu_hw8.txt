@@ -1,0 +1,109 @@
+Danny Yu
+CS471
+Homework Assignment 8
+Due: 10/30/13
+
+1. In Ruby everything is an object including numbers and nil...
+
+Please see 'q1.rb'
+
+2. page 279 exercise 6.1
+
+No, these statements are not contradictory. The compiler is free to evaluate the operands of a binary operator in whatever order, but that does not change its associativity in any way. For example, suppose we have (a-b) - (c-d) - (e-f). Either (a-b), (c-d), or (e-f) can be evaluated first, but the compiler, because of the associaitivty, will always evaluate the order as ((a-b) - (c-d)) - (e-f). Basically, the subarguments can be evaluated in any order because that does not affect associaitivity.
+
+3. page 280 exercise 6.7
+Is &(&i) ever valid in C? Explain.
+
+No. If i is a double pointer, ie: int **i, then &i should give the address of the pointer *i, while &(&i) should theoretically give the address of that address. However, an address itself does not have an address because it is a compile time construct. The compiler would most likely complain.
+
+4. page 281 exercise 6.13  
+
+Consider the following expression in C: a/b > 0 && b/a > 0. 
+What will be the result of evaluating this expression when a is zero? 
+
+Since 0/b = 0, 0 > 0 would be false and and immediate short circuit would occur because (0 && anything) = 0.  
+
+What will be the result when b is zero? 
+
+When b is 0, the compiler gives a floating point exception because a/b would be dividing by zero. 
+
+Would it make sense to try to design a language in which this expression is guaranteed to evaluate to false when either a or b (but not both) is zero? Explain your answer.
+
+No. If you wanted to avoid the divide by zero error, you would have to switch from evaluating and short circuiting from left-to-right and from right-to-left, depending on if a or b is zero. However, there is no reliable way to switch which side is evaluated first depending on what which side results in 0 vs a floating point error.
+
+5. Variation of  exercises 6.15and 6.16.  Add two iterator methods to the Tree class in TreeModule.py. preorder() is an iterator that traverses the tree object in preorder and postorder() is an iterator that traverses the tree object in postorder. 
+
+Please see TreeModule.py
+
+6. Repeat problem 5 using Ruby.
+
+Please see treeModule.rb
+
+7. C++/C questions ("Thinking in C++" is a good reference)::
+A. In C++, what is the difference between assigning a value to a pointer and to a reference?
+
+- A reference is an alias or an alternative name for an object, while a pointer "points" to that value in memory.
+- Once a reference is created, it cannot be later made to reference another object, unlike with pointers.
+- References cannot be null, whereas pointers can.
+- References cannot be uninitialized - they must be initialized as soon as they are created.
+
+Source: http://en.wikipedia.org/wiki/Reference_%28C++%29
+
+B. In C++, what is the difference between taking the address (via operator &)  of a pointer and a reference?
+
+The address of a reference is the address of the aliased object. However, the address of a pointer is the address the pointer itself, which is pointing to another location in memory.
+
+Source:
+http://publib.boulder.ibm.com/
+
+C. What is void * ? Why have it? void * is not exactly the same in C and C++. Provide an example that will illustrate the difference between C and C++. 
+
+A void * pointer is just a pointer to a memory location where the type can be anything. void * is designed to be a generic pointer type so that any pointer value can be converted to a void * and back again without any loss of information. In C, pointer conversions to and from void* are implicit. However in C++, conversions to void* are implicit, but from a void* to anything else requires a cast.
+
+int* a = new int;
+void* b = a; // Works okay for C/C++ 
+a = b;	 // void* to an int* would not work in C++ (information is being added)
+
+Source:
+http://stackoverflow.com/questions/7290923/when-printf-is-an-address-of-a-variable-why-use-void
+http://stackoverflow.com/questions/1736833/void-pointers-difference-between-c-and-c
+http://stackoverflow.com/questions/5104640/what-is-void-and-to-what-variables-objects-it-can-point-to
+
+D. Suppose we tried to write a C procedure what initialize an array to a certain size as follows:
+
+   void init(int a[], int size) {
+     a = (int*) malloc(size*sizeof(int));
+   }
+
+Will this compile? What if anything, is wrong with with ? Explain.
+
+Yes, this would compile. However, the compiler will read int a[] as a pointer and not an array. In C, you can only pass pointers because that is how the C compiler treats them. If you tried to pass an array to init, the compiler would give you a warning that there are conflicting types for 'init', but would read int a[] as an int *a.
+
+Source: 
+http://stackoverflow.com/questions/444746/passing-an-array-as-a-function-parameter-in-c
+
+8. Suppose we wrote the following try block in C++;
+      try {
+           // do something
+      }
+      catch (...) {cout << "general error!";}
+      catch (range_error) {cout << "range error!";}
+
+What is wrong with this code?
+
+catch (...) is used by default to catch errors. It must be the last catch block or else it would capture all errors as a general error, even if it were a range_error. The range_error catch block would never be executed. The compiler would also, however, throw an error about the catch (...) block not being written last.
+
+9. C++ and Java loops are often written with empty bodies by placing all side effects into the tests, such as in the following two examples:
+
+    i = 0;
+    while (a[i++] !=0);
+
+    for (i = 0; a[i] != 0; i++);
+     
+Are these loops equivalent? Explain.
+
+Yes, these loops are equivalent, so long as they have empty bodies.
+
+The while loop starts with a[0] because i is initalized to 0 and with post-increment, i++ increments i to i=1, but will return the old value of i (i=0). The while loop then will start over with this new value of i.
+
+For the for loop, i is also initalized to 0 so when the a[i] != 0 condition is checked, i=0 at this point. i then increases afterwards to i=1, where the loop starts over, like the while loop.
