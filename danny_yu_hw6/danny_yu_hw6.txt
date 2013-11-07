@@ -1,0 +1,119 @@
+Danny Yu
+CS471
+Due 10/15/13
+Homework Assignment 6
+
+1. Page 163 exercise 3.1
+
+For C:
+- The number of built-in functions: language design time
+- The variable declaration that corresponds to a particular variable refer- ence: bound at compile time (C uses static scope)
+- The maximum length allowed for a constant (literal) character string: language implementation time
+- The referencing environment for a subroutine that is passed as a parameter: the referencing environment for a subroutine passed as a parameter is always the same as the environment in effect when the subroutine was declared.
+- The address of a particular library routine: bound by the linker
+- The total amount of space occupied by program code and data: bound at run time.
+
+Source: http://www.cise.ufl.edu/class/cop5555su09/HomeWorks/HW5Sol.txt
+
+2. Use gcc  to create an assembly file of powerR.c
+a) Draw the activation record for powerR().
+
+-------------
+|
+|  4: 'pow' argument
+|
+|------------
+|
+|  8: 'base' argument
+|
+|-----------
+|
+|  16: memory for recursive powerR call
+|
+-------------
+
+b) The stack grows downward toward lower addresses
+c) See powerR.s
+
+3. 
+A) Dr. Erna Schneider Hoover - Came up with the idea to use computing to regulate incoming calls for Bell Labs. It prevented overloads by monitoring call traffic and prioritizing tasks.  Made a breakthrough for women - was first female supervisor within Bell Labs.
+B) Grace Hopper - One of the first programmers of the Harvard Mark I computer (used for computations in the US Navy. Developed the first compiler for a computer programming language. Lead to the development of COBOL. US Navy destroyed "USS Hopper" is named after her.
+C) Lenore Blum - Worked on secure random number generators and evaluating rational functions. Published a paper with Shub and Smale on NP Completeness, recursive functions, and universal Turing Machines. Professor at Carnegie Mellon.
+D) Carla Meninsky - Video game designer for the Atari 2600 video game console.One of two female engineers at Atari to develop video game cartridges released in early 1980's. Had a lifelong dream of creating animation tools.
+E) Frances Elizabeth "Fran" Allen - Pioneer in the field of optimizing compilers. Achievements include work in compilers, code optimization, parallelization. Also had a role in intelligence work on programming langauges and security codes for the NSA.
+F) Barbara Liskov - Led many significant projects - Venus operating system, design/implementation of CLU, Argue, and Thors. Her work led to the development of object-oriented programming. One of the first women in the US to be awarded a PhD from a computer science department.
+G) Anita Borg - Developed and patented a method for generating complete address traces for analyzing and designing high-speed memory system. Developed MECCA, an email and Web-based system. Founded the Institute for Women and Technology. 
+H) Adele Goldberg - Participated in the development of Smalltalk-80 and various concepts related to OOP. Served as president of ACM from 1984 - 1986. Apple eventually used her ideas and implementations as the basis for the Macintosh desktop.
+
+Sources:
+http://www.ieeeghn.org/wiki/index.php/Erna_Schneider_Hoover
+http://en.wikipedia.org/wiki/Grace_Hopper
+http://en.wikipedia.org/wiki/Lenore_Blum
+http://en.wikipedia.org/wiki/Carla_Meninsky
+http://en.wikipedia.org/wiki/Frances_E._Allen
+http://en.wikipedia.org/wiki/Barbara_Liskov
+http://en.wikipedia.org/wiki/Anita_Borg
+http://en.wikipedia.org/wiki/Adele_Goldberg_%28computer_scientist%29
+
+4. Many storage-management algorithms maintain a list of free blocks.  Here are two different algorithms, first fit and best fit, used to search this list and return a block of the appropriate size.  Which strategy, if either, will result in lower external fragmentation?  What does external fragmentation depend on?
+
+First fit selects the first block large enough to satisfy the request. Best fit selects searches the whole list to find the smallest block large enough to satisfy the request - this results in a larger number of small "left-over" blocks. Thus which approach results in lower external fragmentation depends on the distribution of size requests.
+
+Source: Scott's Programming Language Pragmatics p.119
+
+5. What is the complexity of using first fit algorithm to allocate blocks?  Briefly explain an algorithm to speed up the allocation. What is the complexity of this modification?
+
+First fit is O(n). To reduce this cost, some storage management algorithms maintain separate free lists for blocks of different sizes. The cost of this modification reduces the complexity to a constant.
+
+Source: Scott's Programming Language Prgamatics p.119 - 120.
+
+6. Page 121 CYU( check your understand) #4, page 132 CYU #12, 15, 20 and page 164 exercise 3.4.
+
+- Explain the distinction between the lifetime of a name-to-object binding and its visibility.
+
+Lifetime is the period of time between the creation and destruction of a name-to-object binding. Its visibility is where/when it can be accessed.
+
+- What do we mean by the scope of a name-to-object binding?
+
+Scope is the textual region of the program in which a binding is active. 
+
+- What is a referencing environment ?
+
+It is the set of active bindings at any given point in a program's execution.
+
+- Explain the difference between a declaration and a definition. Why is the distinction important?
+
+A declaration introduces a name and indicates a scope, but may omit certain implementation details. A definition describes the object enough for the compiler to determine its implementation. The distinction is important to handle recursive types/ subroutines.
+
+Source: Answers found it Scott's Programming Languages Pragmatics
+
+- Give three concrete examples drawn from programming languages with which you are familiar in which a variable is live but not in scope.
+
+// in C:
+int main() {
+    foo();
+    printf("%d", x);     //x would not be in scope
+    return 0;
+}
+void foo() {
+     int x = 4;		//x is live
+}
+
+// In Ruby:
+
+5.times do |x| { puts "#{x} x is live in this block!" }
+puts "#{x} x would not be in scope here"
+
+// In C++:
+void Foo() {
+     static int x = 4; // x is live (static variables are local in scope)
+}
+int main() {
+    Foo();
+    x = 10; // x is not in scope here
+}
+       
+7. Page 165 exercise 3.7.
+
+a) Brad, used to Java's garbage collection, forgets to call delete_list to free memory for each time he has allocated memory using insert. This eats up memory and eventually causes the crash.
+b) delete_list now free's the old nodes of list L, but also deletes the new nodes of list T (because they reference the same nodes), causing the rror.
