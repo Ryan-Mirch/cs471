@@ -1,0 +1,122 @@
+Danny Yu
+CS471
+Assignment 9
+Due: 11/6/13
+
+1. Discuss the tradeoff between macro, inline function and function in C.  Cover a comparision of speed, space and type checking of each.
+
+
+Inline expansion has the disadvantage of increasing code size since the entire body of the subroutine appears at every call site. Macros work just like text substitution in the code, so they also increase the code size. Regular functions take up less space, as a result. Inline functions and macros are faster than regular functions, but the compiler has a choice to inline or not, depending on what would result in faster execution. Macros are not type checked, but inline/regular functions are.
+
+Sources:
+http://stackoverflow.com/questions/13375288/inline-function-vs-macro-function
+http://stackoverflow.com/questions/4761504/what-is-the-difference-between-macro-inline-function-with-respect-to-execution?rq=1
+
+2. page 284 exercise 6.31
+Give an example in C in which an in-line subroutine may be significantly faster than a functionally equivalent macro. Give another example in which the macro is likely to be faster. (Hint: think about applicative vs normal- order evaluation of arguments.)
+
+#define FOO(a) {int x = a * 3 + a - a;}
+inline int FOO(a) {a * 3 + a - a;}
+
+If 'a' is an expression, the inline function would use applicative evaluation of the argument and thus would not need to recompute it for each instance of 'a' inside the function, which would be faster than the macro, which would use norma-order evaluation of 'a' and have to recompute 'a' for each instance.
+
+#define SOME_CONSTANT 100
+inline int SOME_CONSTANT() {return 100;} 
+
+The macro would be faster here because it would just substitute the constant instead of calling the function and executing its body.
+
+3. State which variables are type equivalent under (a) structural equivalence, (b) strict name equivalence, and (c) the actual C equivalence algorithm.
+
+typedef char* Label1;
+typedef char* Label2:
+
+Label1 x,y;
+Label2 w;
+Label2 z;
+
+They are all structurally equivalent (all char*'s).
+Strict name equivalence: w,z are equivalent. x,y are equivalent.
+Actual C equivalence: In C, structural equivalence is used, except for structs,
+       	 	      so x,y,w,z are all equivalent.
+
+Source:
+http://www.cs.binghamton.edu/~lander/cs571/Chap3notes.html
+
+4. Which of the following assignments does the compiler complain about?
+
+The compiler complains about:
+dp = vp;
+ip = dp;
+dp = ip;
+ip = vp;
+ip = static_cast<int*>(dp);
+
+Briefly explain the behavior of the compiler.  Will *ip ever have the value 3 after one of the assignments to ip ?
+
+The compiler does not allow vp to be assigned to dp or ip because a double* or int* has more information that a void* does not have. You cannot assign dp to ip or ip to dp because the pointers contain different information about the type of what they point to. 
+No, *ip will never have the value 3 after one of these assignments. reinterpret_cast only guarantees that if you cast a pointer to a diff type AND back to the original type, you get the original value back.
+
+Source:
+http://stackoverflow.com/questions/573294/when-to-use-reinterpret-cast
+
+5. Given the language (a) C++ and (b) Java, write down the number of pow function called in each of the 8 calls, or write "illegal" if a call cannot be resolved in the language, or if a data type conversion cannot be made.
+
+1. int pow(int,int);
+2. double pow(double, double);
+3. double pow(int, double);
+
+int x;
+double y;		C++		Java
+x = pow(2,3);		1		1
+y = pow(2,3);		1		1
+x = pow(2,3.2);		3		Error
+y = pow(2,3.2);		3		3
+x = pow(2.1,3);		Error		Error
+y = pow(2.1,3);		Error		2
+x = pow(2.1,3.2);	2		Error
+y = pow(2.1,3.2);	2		2
+
+6. page 376 exercise 7.15
+
+Consider the following C declaration, compiled on a 32-bit Pentium machine:
+
+struct { 
+   int n;
+   char c; 
+} A[10][10];
+
+If the address of A[0][0] is 1000 (decimal), what is the address of A[3][7]?
+
+1296
+
+7. page 378 exercise 7.20
+double *a[n]; 	     // a is array of n pointers to double
+double (*b)[n];      // b is pointer to array of n doubles
+double (*c[n])();    // c is array of n pointers to functions returning doubles
+double (*d())[n];    // d is a function returning a pointer to an array of n doubles
+
+8. page 442 exercise 8.14 Provide details on how you arrive at your answer.
+
+double(*foo(double(*)(double,double[]),double))(double, ...);
+Describe in English the type of foo.
+
+foo is a function taking a (pointer to a function taking a double and array of doubles that returns a double) and a double that returns a pointer to a function taking a double and anything that returns a double.
+
+Got help from:
+http://stackoverflow.com/questions/19460946/meaning-of-this-complex-declaration
+
+9. Suppose this C++ code...
+
+The remaining outputs are:
+5 100  180 8
+
+k = 5, so
+i+1 = 4		// performs pointer arithmetic so it becomes 0 + (1 * 4)
+i+k = 20 	// i+k = 0+5, pointer arith makes it 0 + (5 * 4)
+k = 5
+a + k = 100	// a+k = 0+5, pointer arith makes it 0 + (5 * (4*5))
+&(a[9]) = 180	// a[9] means 9 structs, each with an array of 5 ints so
+	  	   9 * (5 * 4) = 180
+&(a[9])-(a+1) = 8 // subtracting array pointers gives you the distance apart in
+	      	      memory blocks 
+
